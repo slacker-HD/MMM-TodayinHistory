@@ -8,15 +8,11 @@
 Module.register("MMM-TodayinHistory", {
 	defaults: {
 		apiUrl: "https://api.oick.cn/lishi/api.php",
-		updateInterval: 5 * 1000,
+		updateInterval: 15 * 1000,
 		animationSpeed: 1000
 	},
 	getFact () {
 		this.sendSocketNotification("getJson_s", this.config.apiUrl);
-	},
-
-	updateFact () {
-		this.updateDom(this.config.animationSpeed);
 	},
 
 	getScripts () {
@@ -26,24 +22,21 @@ Module.register("MMM-TodayinHistory", {
 	scheduleUpdateRequest (specifiedDelay) {
 		var self = this;
 		setInterval(function () {
-			self.updateFact();
+			self.updateDom(self.config.animationSpeed);
 		}, specifiedDelay);
 	},
 
 	start () {
 		Log.info(`Starting module: ${this.name}`);
-		this.getFact();
-		this.updateFactAtMidnight();
+		this.setUpdateFactAtMidnight();
 		this.scheduleUpdateRequest(this.config.updateInterval);
-	},
-	getRandomInteger (min, max) {
-		return Math.floor(Math.random() * (max - min + 1)) + min;
 	},
 
 	getDom () {
 		if (!this.HistoryData) {
 			const wrapper = document.createElement("div");
 			const loading = document.createElement("div");
+			loading.className = "title bright medium normal";
 			loading.innerHTML = "数据获取中...";
 			wrapper.appendChild(loading);
 			this.sendSocketNotification("getJson_s", this.config.apiUrl);
@@ -79,7 +72,7 @@ Module.register("MMM-TodayinHistory", {
 		return wrapper;
 	},
 
-	updateFactAtMidnight () {
+	setUpdateFactAtMidnight () {
 		const self = this;
 		setInterval(function () {
 			const time = moment(Date.now()).format("HH:mm:ss");
