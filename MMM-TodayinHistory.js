@@ -1,71 +1,52 @@
 /* global Log, Module, moment, config */
 /* Magic Mirror
  * Module: TodayinHistory
- *
+ * Magic Mirror历史上的今天模块。
  * By 胡迪
  */
 
 Module.register("MMM-TodayinHistory", {
 	defaults: {
 		apiUrl: "https://api.oick.cn/lishi/api.php",
-		updateInterval: 15 * 1000,
-		animationSpeed: 1000,
+		updateInterval: 5 * 1000,
+		animationSpeed: 1000
 	},
-	async getFact() {
-		try {
-			const response = await fetch(this.config.apiUrl);
-			if (!response.ok) {
-				throw new Error(`HTTP error! status: ${response.status}`);
-			}
-			const data = await response.json();
-			this.index = 0;
-			return data;
-		} catch (error) {
-			Log.info(error);
-			return null;
-		}
+	getFact () {
+		this.sendSocketNotification("getJson_s", this.config.apiUrl);
 	},
 
-	updateFact() {
+	updateFact () {
 		this.updateDom(this.config.animationSpeed);
 	},
 
-	getScripts() {
+	getScripts () {
 		return ["moment.js"];
 	},
 
-	scheduleUpdateRequest: function (specifiedDelay) {
+	scheduleUpdateRequest (specifiedDelay) {
 		var self = this;
 		setInterval(function () {
 			self.updateFact();
 		}, specifiedDelay);
 	},
 
-	start() {
+	start () {
 		Log.info(`Starting module: ${this.name}`);
-		this.getFact().then((data) => {
-			Log.info(data);
-			this.HistoryData = data.result;
-			this.updateDom(this.config.animationSpeed);
-		});
+		this.getFact();
 		this.updateFactAtMidnight();
 		this.scheduleUpdateRequest(this.config.updateInterval);
 	},
-	getRandomInteger(min, max) {
+	getRandomInteger (min, max) {
 		return Math.floor(Math.random() * (max - min + 1)) + min;
 	},
 
-	getDom() {
+	getDom () {
 		if (!this.HistoryData) {
 			const wrapper = document.createElement("div");
 			const loading = document.createElement("div");
 			loading.innerHTML = "数据获取中...";
 			wrapper.appendChild(loading);
-			this.getFact().then((data) => {
-				Log.info(data);
-				this.HistoryData = data.result;
-				this.updateDom(this.config.animationSpeed);
-			});
+			this.sendSocketNotification("getJson_s", this.config.apiUrl);
 			return wrapper;
 		}
 
@@ -81,7 +62,7 @@ Module.register("MMM-TodayinHistory", {
 		colonWrapper.className = "title bright medium normal";
 		factWrapper.className = "title bright xlarge light";
 
-		titleWrapper.innerHTML = "历史上的今天——";
+		titleWrapper.innerHTML = "历史上的今天—";
 		yearWrapper.innerHTML = this.HistoryData[this.index].date;
 		colonWrapper.innerHTML = ":";
 		factWrapper.innerHTML = this.HistoryData[this.index].title;
@@ -98,14 +79,23 @@ Module.register("MMM-TodayinHistory", {
 		return wrapper;
 	},
 
-	updateFactAtMidnight: function () {
+	updateFactAtMidnight () {
 		const self = this;
 		setInterval(function () {
 			const time = moment(Date.now()).format("HH:mm:ss");
 			if (time === "00:00:00") {
+				this.HistoryData = null;
 				self.getFact();
+				Log.info("午夜更新数据。");
 			}
 		}, 1000);
-		Log.info("午夜更新数据");
 	},
+	socketNotificationReceived (notification, payload) {
+		if (notification === "getJson_r") {
+			Log.info("获取当天数据。");
+			this.index = 0;
+			this.HistoryData = payload.result;
+			this.updateDom(this.config.animationSpeed);
+		}
+	}
 });
