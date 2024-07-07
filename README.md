@@ -4,5 +4,3 @@
 
 ## 预览
 ![MMM-TodayinHistory](screenshot.png)
-
-

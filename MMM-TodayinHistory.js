@@ -63,6 +63,7 @@ Module.register("MMM-TodayinHistory", {
 		titleWrapper.appendChild(colonWrapper);
 
 		wrapper.appendChild(titleWrapper);
+		wrapper.appendChild(document.createElement("BR"));
 		wrapper.appendChild(factWrapper);
 		this.index++;
 		if (this.index >= this.HistoryData.length - 1) {
@@ -82,11 +83,11 @@ Module.register("MMM-TodayinHistory", {
 			}
 		}, 1000);
 	},
-	socketNotificationReceived (notification, payload) {
+	socketNotificationReceived (notification, data) {
 		if (notification === "getJson_r") {
 			Log.info("获取当天数据。");
 			this.index = 0;
-			this.HistoryData = payload.result;
+			this.HistoryData = data.result;
 			this.updateDom(this.config.animationSpeed * 1000);
 		}
 	}

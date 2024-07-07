@@ -4,11 +4,11 @@ module.exports = NodeHelper.create({
 	start () {
 	},
 
-	async socketNotificationReceived (notification, payload) {
+	async socketNotificationReceived (notification, url) {
 		if (notification === "getJson_s") {
 			var self = this;
 			try {
-				const response = await fetch(payload);
+				const response = await fetch(url);
 				if (!response.ok) {
 					throw new Error(`HTTP error! status: ${response.status}`);
 				}
