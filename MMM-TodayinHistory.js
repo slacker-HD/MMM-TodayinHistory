@@ -1,4 +1,3 @@
-/* global Log, Module, moment, config */
 /* Magic Mirror
  * Module: TodayinHistory
  * Magic Mirror历史上的今天模块。
@@ -8,8 +7,8 @@
 Module.register("MMM-TodayinHistory", {
 	defaults: {
 		apiUrl: "https://api.oick.cn/lishi/api.php",
-		updateInterval: 15 * 1000,
-		animationSpeed: 1000
+		updateInterval: 15, //数据更新显示间隔，单位为秒
+		animationSpeed: 1 //动画显示间隔，单位为秒
 	},
 	getFact () {
 		this.sendSocketNotification("getJson_s", this.config.apiUrl);
@@ -22,14 +21,14 @@ Module.register("MMM-TodayinHistory", {
 	scheduleUpdateRequest (specifiedDelay) {
 		var self = this;
 		setInterval(function () {
-			self.updateDom(self.config.animationSpeed);
+			self.updateDom(self.config.animationSpeed * 1000);
 		}, specifiedDelay);
 	},
 
 	start () {
 		Log.info(`Starting module: ${this.name}`);
 		this.setUpdateFactAtMidnight();
-		this.scheduleUpdateRequest(this.config.updateInterval);
+		this.scheduleUpdateRequest(this.config.updateInterval * 1000);
 	},
 
 	getDom () {
@@ -55,7 +54,7 @@ Module.register("MMM-TodayinHistory", {
 		colonWrapper.className = "title bright medium normal";
 		factWrapper.className = "title bright xlarge light";
 
-		titleWrapper.innerHTML = "历史上的今天—";
+		titleWrapper.innerHTML = "历史上的今天——";
 		yearWrapper.innerHTML = this.HistoryData[this.index].date;
 		colonWrapper.innerHTML = ":";
 		factWrapper.innerHTML = this.HistoryData[this.index].title;
@@ -88,7 +87,7 @@ Module.register("MMM-TodayinHistory", {
 			Log.info("获取当天数据。");
 			this.index = 0;
 			this.HistoryData = payload.result;
-			this.updateDom(this.config.animationSpeed);
+			this.updateDom(this.config.animationSpeed * 1000);
 		}
 	}
 });
