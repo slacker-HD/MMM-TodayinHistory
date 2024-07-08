@@ -63,7 +63,7 @@ Module.register("MMM-TodayinHistory", {
 		titleWrapper.appendChild(colonWrapper);
 
 		wrapper.appendChild(titleWrapper);
-		wrapper.appendChild(document.createElement("BR"));
+		// wrapper.appendChild(document.createElement("BR"));
 		wrapper.appendChild(factWrapper);
 		this.index++;
 		if (this.index >= this.HistoryData.length - 1) {
