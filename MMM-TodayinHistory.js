@@ -49,10 +49,10 @@ Module.register("MMM-TodayinHistory", {
 		const factWrapper = document.createElement("div");
 
 		wrapper.className = "container";
-		titleWrapper.className = "title bright medium normal";
-		yearWrapper.className = "title bright medium light";
-		colonWrapper.className = "title bright medium normal";
-		factWrapper.className = "title bright xlarge light";
+		titleWrapper.className = "title dimmed small normal";
+		yearWrapper.className = "title dimmed small light";
+		colonWrapper.className = "title dimmed small normal";
+		factWrapper.className = "title bright medium light";
 
 		titleWrapper.innerHTML = "历史上的今天——";
 		yearWrapper.innerHTML = this.HistoryData[this.index].date;
