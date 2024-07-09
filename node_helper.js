@@ -1,4 +1,9 @@
-var NodeHelper = require("node_helper");
+/* Magic Mirror
+ * Module: TodayinHistory
+ * Magic Mirror历史上的今天模块。
+ * By 胡迪
+ */
+const NodeHelper = require("node_helper");
 
 module.exports = NodeHelper.create({
 	start () {
