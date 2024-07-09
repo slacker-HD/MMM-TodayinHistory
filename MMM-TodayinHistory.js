@@ -83,6 +83,7 @@ Module.register("MMM-TodayinHistory", {
 			}
 		}, 1000);
 	},
+
 	socketNotificationReceived (notification, data) {
 		if (notification === "getTodayInHistory_r") {
 			Log.info("获取当天数据。");
