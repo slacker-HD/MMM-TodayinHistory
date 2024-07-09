@@ -11,7 +11,7 @@ Module.register("MMM-TodayinHistory", {
 		animationSpeed: 1 //动画显示间隔，单位为秒
 	},
 	getFact () {
-		this.sendSocketNotification("getJson_s", this.config.apiUrl);
+		this.sendSocketNotification("getTodayInHistory_s", this.config.apiUrl);
 	},
 
 	getScripts () {
@@ -38,7 +38,7 @@ Module.register("MMM-TodayinHistory", {
 			loading.className = "title bright medium normal";
 			loading.innerHTML = "数据获取中...";
 			wrapper.appendChild(loading);
-			this.sendSocketNotification("getJson_s", this.config.apiUrl);
+			this.sendSocketNotification("getTodayInHistory_s", this.config.apiUrl);
 			return wrapper;
 		}
 
@@ -84,7 +84,7 @@ Module.register("MMM-TodayinHistory", {
 		}, 1000);
 	},
 	socketNotificationReceived (notification, data) {
-		if (notification === "getJson_r") {
+		if (notification === "getTodayInHistory_r") {
 			Log.info("获取当天数据。");
 			this.index = 0;
 			this.HistoryData = data.result;

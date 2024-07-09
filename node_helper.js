@@ -5,7 +5,7 @@ module.exports = NodeHelper.create({
 	},
 
 	async socketNotificationReceived (notification, url) {
-		if (notification === "getJson_s") {
+		if (notification === "getTodayInHistory_s") {
 			var self = this;
 			try {
 				const response = await fetch(url);
@@ -13,7 +13,7 @@ module.exports = NodeHelper.create({
 					throw new Error(`HTTP error! status: ${response.status}`);
 				}
 				const data = await response.json();
-				self.sendSocketNotification("getJson_r", data);
+				self.sendSocketNotification("getTodayInHistory_r", data);
 			} catch (error) {
 				console.log(error);
 			}
